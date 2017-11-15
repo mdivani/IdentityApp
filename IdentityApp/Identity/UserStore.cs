@@ -13,10 +13,12 @@ namespace IdentityApp.Identity
     public class UserStore : IUserTokenProvider<IdentityUser, string>, IUserLoginStore<IdentityUser, string>, IUserClaimStore<IdentityUser, string>, IUserRoleStore<IdentityUser, string>, IUserPasswordStore<IdentityUser, string>, IUserSecurityStampStore<IdentityUser, string>, IUserStore<IdentityUser, string>, IUserEmailStore<IdentityUser, string>, IDisposable
     {
         private readonly SecurityService _security;
+        private readonly object Obj;
 
         public UserStore(IUnitOfWork unitOfWork)
         {
             _security = new SecurityService(unitOfWork);
+            Obj = new object();
         }
 
         public Task CreateAsync(IdentityUser user)
@@ -47,10 +49,13 @@ namespace IdentityApp.Identity
             return Task.FromResult<IdentityUser>(getIdentityUser(user));
         }
 
-        public Task<IdentityUser> FindByNameAsync(string userName)
+        public async Task<IdentityUser> FindByNameAsync(string userName)
         {
-            var user = _security.FindUserByNameAsync(userName).Result;
-            return Task.FromResult<IdentityUser>(getIdentityUser(user));
+            var user = await _security.FindUserByNameAsync(userName);
+            lock (Obj)
+            {
+            return getIdentityUser(user);
+            }
         }
 
         public Task UpdateAsync(IdentityUser user)

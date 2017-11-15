@@ -6,6 +6,7 @@ using Microsoft.Owin.Security;
 using System;
 using System.Web;
 using Unity;
+using Unity.AspNet.Mvc;
 using Unity.Injection;
 
 namespace IdentityApp
@@ -46,6 +47,7 @@ namespace IdentityApp
             // Make sure to add a Unity.Configuration to the using statements.
             //container.LoadConfiguration();
 
+            container.RegisterType<ApplicationDbContext>(new PerRequestLifetimeManager());
             container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<IUserStore<IdentityUser, string>, UserStore>();
             container.RegisterType<RoleStore>();
