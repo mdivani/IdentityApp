@@ -1,0 +1,37 @@
+﻿@model IdentityApp.Models.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.TextBoxFor(Model => Model.Email, new { @class = "form-control", @placeholder = "Enter Email" })
+            @Html.ValidationMessageFor(Model => Model.Email)
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", @placeholder = "Enter Password" })
+            @Html.ValidationMessageFor(Model => Model.Password)
+        </div> 
+        <div class="form-group">
+            @Html.CheckBoxFor(Model => Model.RememberMe)
+            @Html.LabelFor(Model => Model.RememberMe)
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-block btn-primary col-lg-10" value="Sign In" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", "Home", null, null)<span> / </span>
+    @Html.ActionLink("Sign Up", "Register")
+</div>
+
+
